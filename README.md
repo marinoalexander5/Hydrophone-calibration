@@ -4,7 +4,7 @@ This script was created to automate steps the process of hydrophone calibration 
 
 The basic measuring methodology consisted on the reference method, using a projector and a known calibrated hydrophone as a reference. Recordings were made in a 4x6x10 m pool, locating the transducers as close to the middle of the pool as possible to avoid wall reflections from interfeering. Transducer positions were calculated acording to the mentioned standard, and by using **echoFreeTimePlot.m** function to look for best combination.
 
-Each input signal consisted on 12 pulses of an aproximate duration of 50 ms separated by variable times of silence while we waited for the reverberations to cease. Beginning and ending of each pulse was computed through a SNR threshold set through visual inspection.
+Each input signal consisted on 12 pulses of a specific frequency step and an aproximate duration of 50 ms separated by variable times of silence while we waited for the reverberations to cease. **crateFilter.m** function is used to automate the filter creation for each imported file in its corresponding frequency, implementing a bandpass filter to reduce effect of possible artifacts created by the signal generator. Beginning and ending of each pulse was computed through a SNR threshold set through visual inspection.
 
 ![Pulses](/example-40khz-pulses.jpg)
 
