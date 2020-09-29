@@ -11,7 +11,7 @@ load myFilters;
 F = [5 6 8 10 12.5 16 20 25 32 40 50 64 80 100 128 160 175 200 230]; % kHz
 % freq_filt_array = [F' myFilters];
 % Load Transfer Function 
-[page,~,~]=xlsread('C:/Users/Camila/Desktop/Alex/Untref/Bioacústica/Matlab programas/función de transferencia.xls',1); % Hidrófono Cethus
+[page,~,~]=xlsread('C:/Users/Camila/Desktop/Alex/Untref/BioacÃºstica/Matlab programas/funciÃ³n de transferencia.xls',1); % HidrÃ³fono Cethus
 freq = page(:,5); %kHz
 freq = freq(1:128);
 sens = page(:,6); %dB re uPa(rms)^2/counts^2
@@ -19,13 +19,13 @@ sens = sens(1:128);
 TF = interp1(freq,sens,F,'linear','extrap'); %interpolar linealmente y despues pasar a dB?????
 %% Separar chunks %%%%%%%%%%%%%%%%%%
 %
-path = {'J:/Backup/Cethus/Calibracion Campo de Mayo 010619/hidro ceth/', ...
-        'J:/Backup/Cethus/Calibracion Campo de Mayo 010619/hidro naty/', ...
-        'J:/Backup/Cethus/Calibracion Campo de Mayo 010619/hidro nico/'};
+path = {'hidro 1/', ...
+        'hidro 2/', ...
+        'hidro 3/'};
 sprintf('Hidrophone 1: Cethus (reference)\nHidrophone 2: Naty\nHidrophone 3: Nico')
 for h = 3 %1: length(path);
     files = dir([path{h} '*.wav']);
-    fprintf('Hidrófono %d\n', h);
+    fprintf('HidrÃ³fono %d\n', h);
     for index = 1 : length(files);
         fprintf('File %d/%d\n Importing %s\n', index, length(files), files(index).name);
         freq_in = input('Enter Frequency in kHz: '); % kHz
@@ -33,11 +33,12 @@ for h = 3 %1: length(path);
         while ~any(F==freq_in);
             freq_in = input('Wrong frequency, try again\nEnter Frequency in kHz: '); % kHz
         end
+        % Remove faulty detections noted during recording 
         if h==1;
             if freq_in==8;
-                sprintf('Primera detección no va, eliminar')
+                sprintf('Primera detecciÃ³n incorrecta, eliminar')
             elseif freq_in==128;
-                sprintf('Alex golpeó la mesa, chequear cual detección eliminar')
+                sprintf('Golpe en la mesa, chequear cual detecciÃ³n eliminar')
             end
         elseif (h==2 && freq_in==2) || (h==3 && freq_in==160);
                 sprintf('Ojota!!!\n')              
@@ -125,7 +126,7 @@ for h = 3 %1: length(path);
            end   
         end
         files(index).detections = det_index(2:end,:);
-        % Gráficos
+        % GrÃ¡ficos
         [check,~]= audioread([path{h} files(index).name]);
         check = filter(myFilters(F==freq_in),check);
         figure(3)
@@ -171,21 +172,21 @@ for h = 3 %1: length(path);
             plot(tt(chunk_start:chunk_end), chunk, 'r', 'linewidth', 2)
             plot(tt(pos), xx_filt(pos), '*r', 'markersize', 5)
             plot(tt(chunk_end), xx_filt(chunk_end), '*g', 'markersize', 5);
-            title(['frequency: ' num2str(files(i).frequency) ' chunk n° ' num2str(j)])
+            title(['frequency: ' num2str(files(i).frequency) ' chunk nÂ° ' num2str(j)])
             pause;
             close
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% VER !! probando sin FFT primero
 %             if h == 1;
 % %                 TODO: VER SI IMPORTAR DIRECTO ARCHIVO '.TF' !!!!!!!!!!!!!!!!!!!!!!!!!!
 %                 % Load Transfer Function 
-%                 [FT,~,~]=xlsread('C:/Users/Camila/Desktop/Alex/Untref/Bioacústica/Matlab programas/función de transferencia.xls',2); % Hidrófono Cethus
+%                 [FT,~,~]=xlsread('funciÃ³n de transferencia.xls',2); % HidrÃ³fono Cethus
 %                 FT = FT(:,6); %dB re uPa(rms)^2/counts^2
 %                 window = hanning(length(chunk));
 %             %       Using Fft to avoid (/Hz) and allow reconstruction 
 %             %         [Pxx,F] = pwelch(signal,window,[],512,fs); %counts(rms)^2/Hz
 %             %         Pxx = 10*log10(Pxx);
 %             %         chunk_cal = Pxx + FT; %[dB re uPa^2/Hz]
-%                 chunk_freq = 2*abs(fft(chunk.*window,NFFT)./NFFT);% ESTUDIAR
+%                 chunk_freq = 2*abs(fft(chunk.*window,NFFT)./NFFT);
 %                 chunk_freq = chunk_freq(1:NFFT/2);
 %                 chunk_freqdB = 10*log10(chunk_freq) + FT; % counts(rms)^2
 %                 chunk_frec_cal = 10.^(chunk_fre_db/10); 
@@ -211,13 +212,13 @@ Gain_ref = 27.2; %dB in A/D step (Avisoft USG-611)
 Gain_naty = [27.2 27.2 27.2 27.2 27.2 27.2 14.8 14.8 14.8 14.8 27.2 27.2 27.2 27.2 27.2 27.2 27.2 27.2 27.2];
 Gain_nico = [27.2 27.2 27.2 27.2 27.2 27.2 27.2 27.2 27.2 14.8 27.2 27.2 27.2 27.2 27.2 14.8 14.8 27.2 27.2];
 %% SPL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-SPL_ref = 20*log10(Vref) - Gain_ref + TF; % [dB re µPa]
+SPL_ref = 20*log10(Vref) - Gain_ref + TF; % [dB re ÂµPa]
 %% Sensitivity Unknown Hydrophone %%%%%%
-Sens_naty = 20*log10(Vnaty) - Gain_naty - SPL_ref; % [dB re counts/µPa]
-Sens_nico = 20*log10(Vnico) - Gain_nico - SPL_ref; % [dB re counts/µPa]
+Sens_naty = 20*log10(Vnaty) - Gain_naty - SPL_ref; % [dB re counts/ÂµPa]
+Sens_nico = 20*log10(Vnico) - Gain_nico - SPL_ref; % [dB re counts/ÂµPa]
 %% Counts ---> Volts
-Sens_naty_volts = Sens_naty + 20*log10(1/33580); % [db re V/µPa]
-Sens_nico_volts = Sens_nico + 20*log10(1/33580); % [db re V/µPa]
+Sens_naty_volts = Sens_naty + 20*log10(1/33580); % [db re V/ÂµPa]
+Sens_nico_volts = Sens_nico + 20*log10(1/33580); % [db re V/ÂµPa]
 %% Save file in TF format for Triton
 dlmwrite('Cadic_transfer_function.tf', Sens_naty, ' ');
 dlmwrite('NICO_Cethus_transfer_function.tf', Sens_nico, ' ');
@@ -228,9 +229,9 @@ loglog(f_axis, Sens_naty, 'LineWidth', 2);
 figure()
 loglog(f_axis, Sens_nico, 'LineWidth', 2)
 xlabel('Frequency [Hz]')
-ylabel('Sensitivity [dB re counts/µPa]')
+ylabel('Sensitivity [dB re counts/ÂµPa]')
 title('Hydrophone Sensitivity');
-legend('Hidrófono Naty', 'Hidrófono Nico')
+legend('HidrÃ³fono Naty', 'HidrÃ³fono Nico')
 grid on;
 ax=gca;
 ax.XTick=F*1e3;
