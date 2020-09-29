@@ -11,7 +11,7 @@ load myFilters;
 F = [5 6 8 10 12.5 16 20 25 32 40 50 64 80 100 128 160 175 200 230]; % kHz
 % freq_filt_array = [F' myFilters];
 % Load Transfer Function 
-[page,~,~]=xlsread('C:/Users/Camila/Desktop/Alex/Untref/Bioacústica/Matlab programas/función de transferencia.xls',1); % Hidrófono Cethus
+[page,~,~]=xlsread('/función de transferencia.xls',1); % Hidrófono Cethus
 freq = page(:,5); %kHz
 freq = freq(1:128);
 sens = page(:,6); %dB re uPa(rms)^2/counts^2
