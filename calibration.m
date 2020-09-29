@@ -64,7 +64,7 @@ for h = 3 %1: length(path);
         set(f_1,'WindowStyle','docked')
         plot (th_def_env)
         sprintf('Enter 0 to skip file')
-        th = input('Define Threshold (counts) porfis:  '); % 0 to skip file
+        th = input('Define Threshold (counts):  '); % 0 to skip file
         if th == 0;
             continue
         end
@@ -73,7 +73,7 @@ for h = 3 %1: length(path);
         % Confirm choice from plot
         confirm = input('Confirm Threshold (Y/N): ','s');
         if confirm == 'N';
-            th = input('Define Threshold (counts) porfis:  ');
+            th = input('Define Threshold (counts):  ');
             hold on;
             plot([1 length(th_def_filt)],[th th], '--g', 'linewidth', 2)
         end
@@ -113,13 +113,13 @@ for h = 3 %1: length(path);
                       chunk_end = length(xx_filt)-1;  
                     end
                     det_index(end,2) = to + chunk_end;
-%                     plot(chunk_end, xx_filt(chunk_end), '*g', 'markersize', 10) % coment este y eel de abajo!!!
+%                     plot(chunk_end, xx_filt(chunk_end), '*g', 'markersize', 10) % coment este y el de abajo!!!
 %                     hold off;
                     to = to + chunk_end + 1;
                     continue
 %                end
            else 
-%                plot(chunk_start, xx_filt(chunk_start), '*r', 'markersize', 10) % coment este y eel de abajo!!!
+%                plot(chunk_start, xx_filt(chunk_start), '*r', 'markersize', 10) % coment este y el de abajo!!!
 %                hold off;
                to = to + chunk_start; % Redefine window
                det_index(end+1,1) = to;
