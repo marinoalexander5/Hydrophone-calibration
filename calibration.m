@@ -41,7 +41,7 @@ for h = 3 %1: length(path);
                 sprintf('Golpe en la mesa, chequear cual detección eliminar')
             end
         elseif (h==2 && freq_in==2) || (h==3 && freq_in==160);
-                sprintf('Ojota!!!\n')              
+                sprintf('Warning!!!\n')              
         end
         files(index).frequency = freq_in*10^3; % Hz
         to = 1; 
@@ -150,7 +150,7 @@ for h = 3 %1: length(path);
 %     NFFT = 512;
     i=0;
     j=0;
-    for i = 14:length(files)
+    for i = 1:length(files)
         for j = 1 : length(files(i).detections)
             [file, fs] = audioread([path{h} files(i).name],[files(i).detections(j,1) files(i).detections(j,2)],'native');
             xx = double(file);
@@ -220,8 +220,8 @@ Sens_nico = 20*log10(Vnico) - Gain_nico - SPL_ref; % [dB re counts/µPa]
 Sens_naty_volts = Sens_naty + 20*log10(1/33580); % [db re V/µPa]
 Sens_nico_volts = Sens_nico + 20*log10(1/33580); % [db re V/µPa]
 %% Save file in TF format for Triton
-dlmwrite('Cadic_transfer_function.tf', Sens_naty, ' ');
-dlmwrite('NICO_Cethus_transfer_function.tf', Sens_nico, ' ');
+dlmwrite('C_transfer_function.tf', Sens_naty, ' ');
+dlmwrite('Cethus_transfer_function.tf', Sens_nico, ' ');
 %% Plot Frequency vs Sensitivity
 f_axis = F*1e3;
 figure()
